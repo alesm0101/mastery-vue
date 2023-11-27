@@ -1,16 +1,6 @@
 import axios from 'axios'
 
-export interface Event {
-  id: number;
-  category: string;
-  title: string;
-  description: string;
-  location: string;
-  date: string;
-  time: string;
-  petsAllowed: boolean;
-  organizer: string;
-}
+
 
 const apiClient = axios.create({
   baseURL: 'https://my-json-server.typicode.com/alesm0101/mastery-vue',
@@ -22,8 +12,8 @@ const apiClient = axios.create({
 })
 
 export default {
-  getEvents() {
-    return apiClient.get('/events')
+  getEvents(perPage: number, page: number) {
+    return apiClient.get(`/events?_limit=${perPage}&_page=${page}`)
   },
   getEvent(id: string) {
     return apiClient.get('/events/' + id)

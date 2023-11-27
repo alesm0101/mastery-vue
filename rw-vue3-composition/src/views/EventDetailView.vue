@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import EventService, { type Event } from '@/services/EventServices'
+import EventService from '@/services/EventServices' // , { type Event }
+import { type EventApi } from '@/models/Event' // , 
 
-// const event: Ref<Partial<Event>> = ref({});
-const event = ref({} as Event)
+// const event: Ref<Partial<EventApi>> = ref({});
+const event = ref({} as EventApi)
 
 const props = defineProps({
   id: {
