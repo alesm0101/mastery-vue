@@ -51,12 +51,24 @@ const router = createRouter({
       ]
     },
     {
+      // redirect from events to event because the nested children
+      path: "/events/:afterEvent(.*)",
+      redirect: (to) => {
+        return { path: "/event/" + to.params.afterEvent };
+      },
+    },
+    {
       path: '/about',
       name: 'About',
+      // alias:  '/about-us', // don't use to avoid ceo duplicate
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/AboutView.vue')
+    },
+    { 
+      path: '/about-us', 
+      redirect: { name: "About" }
     }
   ]
 })
