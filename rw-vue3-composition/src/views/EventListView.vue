@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import EventCard from '@/components/EventCard.vue'
-import { ref, onMounted, computed, watch, watchEffect } from 'vue'
+import { ref, onMounted, computed, watchEffect } from 'vue'
 import EventService from '@/services/EventServices'
-import { type EventApi } from '@/models/Event' // , 
+import type { EventType } from '@/types/Event' // , 
 
 // const events = ref([] as Array<Event>)
-const events = ref<EventApi[]>([])
+const events = ref<EventType[]>([])
 
 const props = defineProps({
   page: {
@@ -41,13 +41,10 @@ onMounted(() => {
   <div class="events">
     <EventCard v-for="event in events" :key="event.id" :event="event" />
     <div class="pagination">
-      <RouterLink rel="prev" :to="{ name: 'event-list', query: { page: page - 1 } }" v-if="page > 1" id="page-prev">
+      <RouterLink v-if="page > 1" rel="prev" id="page-prev" :to="{ name: 'EventList', query: { page: page - 1 } }">
         Prev
       </RouterLink>
-      <RouterLink rel="next" :to="{
-        name: 'event-list',
-        query: { page: page + 1 }
-      }" id="page-next" v-if="hasNext">
+      <RouterLink v-if="hasNext" rel="next" id="page-next" :to="{ name: 'EventList', query: { page: page + 1 } }">
         Next
       </RouterLink>
     </div>

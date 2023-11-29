@@ -1,10 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import EventService from '@/services/EventServices' // , { type Event }
-import { type EventApi } from '@/models/Event' // , 
-
-// const event: Ref<Partial<EventApi>> = ref({});
-const event = ref({} as EventApi)
+import EventService from '@/services/EventServices'
+import type { EventType } from '@/types/Event'
 
 const props = defineProps({
   id: {
@@ -12,6 +9,9 @@ const props = defineProps({
     type: String
   }
 })
+
+// const event: Ref<Partial<EventType>> = ref({});
+const event = ref({} as EventType)
 
 onMounted(() => {
   EventService.getEvent(props.id)
@@ -26,12 +26,14 @@ onMounted(() => {
 
 
 <template>
-  <div>
+  <div v-if="event.id">
     <h1>{{ event.title }}</h1>
-    <div class="events">
-      <p>{{ event.time }} on {{ event.date }} @ {{ event.location }}</p>
-      <p>{{ event.description }}</p>
-    </div>
+    <nav>
+      <RouterLink :to="{ name: 'EventDetails' }">Detail</RouterLink> |
+      <RouterLink :to="{ name: 'EventRegister' }">Register</RouterLink> |
+      <RouterLink :to="{ name: 'EventEdit' }">Edit</RouterLink> |
+    </nav>
+    <RouterView :event="event" />
   </div>
 </template>
 
