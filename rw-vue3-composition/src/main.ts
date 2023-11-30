@@ -8,7 +8,7 @@ import router from './router'
 const app = createApp(App)
 
 // Create a reactive object
-const GStore = reactive({ notifyMessage: '' })
+const GStore = reactive({ count: 0, messages: [] })
 app.provide('GStore', GStore) 
 
 app.use(createPinia())
