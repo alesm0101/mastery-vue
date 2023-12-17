@@ -6,6 +6,12 @@ const gNotify: any = inject('GStore')
 
 const counter = computed(() => gNotify.count)
 
+
+/*
+refactor:
+update string instead of array and handle count internally
+*/
+
 watch(
   counter, (newValue, oldValue) => {
     const isAdding = newValue > oldValue
