@@ -9,8 +9,7 @@ const { event } = defineProps(['event'])
 const register = () => {
   // If registered then redirect to event details
   gNotify.count++
-  const idMessage = `register_${gNotify.count}`
-  gNotify.messages.push({ id: idMessage, text: `You are successfully registered for ${event.title}` })
+  gNotify.messages.push({ id: `register_${gNotify.count}`, text: `You are successfully registered for ${event.title}` })
 
   // router.push adds history, router.replace doesn't
   // router.push({ name: 'EventDetails' })

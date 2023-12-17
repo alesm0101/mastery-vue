@@ -10,14 +10,14 @@ import { inject } from "vue";
 
 // lazyloading
 // ChunkName for vite: https://router.vuejs.org/guide/advanced/lazy-loading.html#With-Vite
-const About = () => import( '../views/AboutView.vue')
+const About = () => import('../views/AboutView.vue')
 
 const routes = [
   {
     path: '/',
     name: 'EventList',
     component: EventList,
-    props: ((route: RouteLocationNormalized) => ({ page: parseInt(route.query.page as string) || 1 }) ),
+    props: ((route: RouteLocationNormalized) => ({ page: parseInt(route.query.page as string) || 1 })),
     // beforeEnter (to, from, next) {
     //   const page = parseInt(to.query.page as string) || 0 
     //   if (page > 0 ) {
@@ -35,7 +35,8 @@ const routes = [
   {
     path: '/event/:id',
     name: 'EventLayout',
-    props: true,
+    // props: true,
+    props: ((route: RouteLocationNormalized) => ({ id: parseInt(route.params.id as string) || -1 })),
     component: EventLayout,
     children: [
       {
@@ -52,7 +53,7 @@ const routes = [
         path: 'edit',
         name: 'EventEdit',
         component: EventEdit,
-        meta: { requireAuth: true }
+        meta: { requireAuth: false }
 
       }
     ]
@@ -73,14 +74,14 @@ const routes = [
     // which is lazy-loaded when the route is visited.
     component: About
   },
-  { 
-    path: '/about-us', 
+  {
+    path: '/about-us',
     redirect: { name: "About" }
   },
   {
     path: '/:catchAll(.*)',
     name: 'NotFound',
-    component: NotFound  
+    component: NotFound
   },
   {
     path: "/404/:resource",
@@ -91,7 +92,7 @@ const routes = [
   {
     path: '/network-error',
     name: 'NetworkError',
-    component: NetworkError    
+    component: NetworkError
   },
 ]
 
@@ -113,10 +114,10 @@ const router = createRouter({
 router.beforeEach((to, from: any) => {
   // NProgress.start()
   const gNotify: any = inject('GStore')
-
   const notAuthorized = true
   if (to.meta.requireAuth && notAuthorized) {
-    gNotify.messages.push({ id: 'requireAuth', text: 'Sorry, you are not authorized to view this page' })
+    gNotify.count++
+    gNotify.messages.push({ id: `requireAuth_${gNotify.count}`, text: 'Sorry, you are not authorized to view this page' })
 
     if (from.href) { // <--- If this navigation came from a previous page.
       return false

@@ -1,27 +1,34 @@
 
 <script setup lang="ts">
-import { inject, onMounted, watchEffect } from 'vue'
+import { computed, inject, watch } from 'vue' // onMounted, watchEffect
 
 const gNotify: any = inject('GStore')
 
+const counter = computed(() => gNotify.count)
 
-onMounted(() => {
-  watchEffect(() => {
-    const lastMessageID = gNotify.messages.at(gNotify.messages.length - 1)
-    if (gNotify.messages.length) {
-      setTimeout(() => {
-        gNotify.messages = gNotify.messages.filter((n: any) => n.id !== lastMessageID.id)
-      }, 3000)
+watch(
+  counter, (newValue, oldValue) => {
+    const isAdding = newValue > oldValue
+    if (isAdding) {
+      const lastMessageID = gNotify.messages.at(gNotify.messages.length - 1)
+      if (gNotify.messages.length) {
+        setTimeout(() => {
+          console.log('setTimeout')
+          gNotify.messages = gNotify.messages.filter((n: any) => n.id !== lastMessageID.id)
+        }, 3000)
+      }
     }
-  })
+  });
 
-})
+/* onMounted(() => {
+  watchEffect(() => {})
+}) */
 </script>
 
 <template>
   <div class="notify">
     <div class="notifyMessage" v-for="notify in gNotify.messages" :key="notify.id">
-      {{ notify.text }}
+      {{ notify.id }}
     </div>
   </div>
 </template>

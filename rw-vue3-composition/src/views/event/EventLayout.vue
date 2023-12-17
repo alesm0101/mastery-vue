@@ -4,16 +4,29 @@ import EventService from '@/services/EventServices'
 import type { EventType } from '@/types/Event'
 import { useRouter } from 'vue-router';
 
+import { useEventStore } from "@/stores/event";
+
+// use Pinia store:
+const store = useEventStore();
+
 const props = defineProps({
   id: {
     required: true,
-    type: String
+    type: Number
   }
 })
 const router = useRouter()
 
 // const event: Ref<Partial<EventType>> = ref({});
 const event = ref({} as EventType)
+
+// destructuring action method doesn't require using storeToRefs:
+const { deleteEvent: storeDeleteEvent } = store;
+
+const ondeleteEvent = () => {
+  storeDeleteEvent(props.id);
+  router.push({ name: 'EventList' })
+}
 
 onMounted(() => {
   EventService.getEvent(props.id)
@@ -42,6 +55,7 @@ onMounted(() => {
       <RouterLink :to="{ name: 'EventDetails' }">Detail</RouterLink> |
       <RouterLink :to="{ name: 'EventRegister' }">Register</RouterLink> |
       <RouterLink :to="{ name: 'EventEdit' }">Edit</RouterLink> |
+      <button @click="ondeleteEvent">Delete</button>
     </nav>
     <RouterView :event="event" />
   </div>
