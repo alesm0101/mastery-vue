@@ -2,7 +2,7 @@
 import { ref, onMounted } from 'vue'
 import EventService from '@/services/EventServices'
 import type { EventType } from '@/types/Event'
-import { useRouter } from 'vue-router';
+import { onBeforeRouteLeave, useRouter } from 'vue-router';
 
 import { useEventStore } from "@/stores/event";
 
@@ -19,6 +19,9 @@ const router = useRouter()
 
 // const event: Ref<Partial<EventType>> = ref({});
 const event = ref({} as EventType)
+
+
+let unsavedChanges = ref(true)
 
 // destructuring action method doesn't require using storeToRefs:
 const { deleteEvent: storeDeleteEvent } = store;
@@ -45,6 +48,19 @@ onMounted(() => {
       }
     })
 })
+
+onBeforeRouteLeave(() => { // (to, from)
+  if (unsavedChanges.value) {
+    const answer = window.confirm(
+      'Do you really want to leave? you have unsaved changes!'
+    )
+    // cancel the navigation and stay on the same page
+    if (!answer) return false
+  }
+})
+
+
+
 </script>
 
 
